@@ -1,0 +1,8 @@
+build/
+dist/
+*.jks
+*.p12
+*.keystore
+*.db
+*.sqlite*
+.DS_Store

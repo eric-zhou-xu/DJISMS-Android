@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="local.djisms.android" android:versionCode="4" android:versionName="0.3.1">
+<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="35"/>
+<uses-feature android:name="android.hardware.usb.host" android:required="true"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE"/>
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+<application android:icon="@drawable/app_icon" android:label="DJISMS 短信" android:allowBackup="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:supportsRtl="true">
+<activity android:name=".MainActivity" android:exported="true"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+<service android:name=".ReceiverService" android:exported="false" android:foregroundServiceType="connectedDevice"/>
+</application></manifest>

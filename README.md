@@ -1,2 +1,47 @@
-# DJISMS-Android
-Android SMS inbox for DJI / Baiwang QDC507 USB 4G modules. Local storage, no root, no cloud.
+# DJISMS Android
+
+通过 USB 在安卓手机上接收 DJI / Baiwang QDC507 4G 模块中的短信。
+
+## 下载与安装
+
+在 [Releases](https://github.com/eric-zhou-xu/DJISMS-Android/releases) 下载 `DJISMS-Android-0.3.1.apk`，在安卓手机上打开并允许该来源安装。无需 root，不需要 USB 调试或连接电脑即可日常使用。系统安全策略可能限制侧载或 USB 访问。
+
+1. 将带 SIM 的模块通过支持数据传输的 USB 连接接入手机。
+2. 打开 **DJISMS 短信**，点击 **连接接收**，允许 USB 访问和通知。
+3. 接收服务每轮扫描后等待约 5 秒，检查模块 ME 和 SIM SM 存储。断线或错误后可重新点击连接。
+4. 点击短信查看详情、复制正文或删除本机短信。
+
+## 功能与隐私
+
+- 浅色界面、自适应折叠屏双栏、搜索、短信详情和复制。
+- 短信只保存在应用私有 SQLite 数据库，无网络权限，不上传云端。
+- **不删除模块或 SIM 原件，不刷固件，不提供模块上网或发送短信功能。**
+- 本机删除前有确认提示，正文和 PDU 从本机记录中删除；只保留不可逆去重摘要，防止同一原件再次导入。不是存储介质安全擦除工具。
+- 卸载或清除应用数据会清空记录和去重摘要。相同签名覆盖升级保留数据。
+- 暂停接收后不再轮询；接收依赖模块连接、USB 授权和后台服务存活，不保证系统强制停止后自动恢复。
+
+## 兼容性与测试状态
+
+这是 **0.3.1 测试版**，不是全机型稳定版。目标安卓 8.0+、USB Host；目前实测 Samsung SM-F971B 可读取模块短信。识别 USB VID/PID `2ca3:4006`，QDC507 型号、接口 2 与固定 AT 端点；其他模式或固件接口布局可能不兼容。暂不自动切换模块 USB 模式。
+
+- 真实手机安装、启动、窄屏显示及已有记录保留已验证。
+- ME/SM 读取及本地保存已在前序接收版本实测；本次保留原接收流程。
+- 12 项 PDU 解析回归测试通过。
+- 本地删除数据库逻辑和迁移已检查；未用用户真实短信进行破坏性删除验收。
+- 展开双栏及不同厂商后台行为需进一步测试。
+- 时间为本机保存时间；长短信可能按分段显示，尚未自动合并。
+
+## 从源码构建
+
+需要 Python 3、JDK 17、Android SDK Platform 35 与 Build Tools 35.0.0。设置 `JAVA_HOME`、`ANDROID_HOME`（或 `ANDROID_SDK_ROOT`）。执行 `python3 build.py`，输出未签名但已对齐的 APK 到 `dist/`。用自己的密钥通过 Android SDK `apksigner` 签名后安装；自签包不能覆盖官方发布包。仓库和构建脚本不含发布签名密钥，也不自动下载或执行依赖。
+
+独立协议测试：
+
+```sh
+javac -d build/tests src/local/djisms/android/Protocol.java tests/ProtocolTest.java
+java -cp build/tests local.djisms.android.ProtocolTest
+```
+
+## 测试反馈
+
+请在 Issues 提供手机型号、安卓版本、模块型号、是否识别及复现步骤。请勿上传短信正文、验证码、完整号码、IMEI 或 SIM 标识。
